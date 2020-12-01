@@ -1,0 +1,48 @@
+from block import Block
+
+class Falling_Blocks:
+    def __init__(self, palette):
+        self.block1 = Block(0, 0, 1, palette)
+        self.block2 = Block(0, 0, 1, palette)
+        self.r = 0
+
+    def draw(self, screen):
+        self.block1.draw(screen)
+        self.block2.draw(screen)
+
+
+    def move(self, x_diff, y_diff):
+        block1_flag = self.block1.move(x_diff, y_diff)
+        block2_flag = self.block2.move(x_diff, y_diff)
+        if block1_flag or block2_flag:
+            return True
+        else:
+            return False
+
+
+    def update(self, x, y, block1_id, block2_id, limit):
+        self.block1.update(x, y, block1_id, limit)
+        self.block2.update(x, y+1, block2_id, limit)
+        self.r = 0
+
+        
+    def get_pos(self):
+        pos1 = self.block1.get_pos()
+        pos2 = self.block2.get_pos()
+        return [pos1, pos2]
+
+
+    def rotate(self, r):
+        self.r = ( self.r + r ) % 4
+        pos = self.block1.get_pos()
+        x = pos[0]
+        y = pos[1]
+        if self.r == 0:
+            self.block2.set_pos(x, y+1)
+        elif self.r == 1:
+            self.block2.set_pos(x-1, y)
+        elif self.r == 2:
+            self.block2.set_pos(x, y-1)
+        elif self.r == 3:
+            self.block2.set_pos(x+1, y)
+
